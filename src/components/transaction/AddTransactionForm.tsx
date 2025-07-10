@@ -3,8 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { createTransaction } from "@/actions/transaction.actions";
+import { DatePicker } from "../DatePicker";
 
 export function AddTransactionForm() {
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const [amount, setAmount] = useState("");
   const [type, setType] = useState<"income" | "expense">("expense");
 
@@ -18,6 +20,7 @@ export function AddTransactionForm() {
         onChange={(e) => setAmount(e.target.value)}
         name="amount"
       />
+      <DatePicker value={date} onChange={setDate} />
       <div className="flex gap-2 my-2">
         <Button
           variant={type === "expense" ? "default" : "outline"}
@@ -34,9 +37,11 @@ export function AddTransactionForm() {
       </div>
       <Button
         onClick={async () => {
+          console.log({ date });
           const formData = new FormData();
           formData.append("amount", amount.toString());
           formData.append("type", type);
+          formData.append("date", date?.toISOString() || "");
           await createTransaction(formData);
         }}
       >
