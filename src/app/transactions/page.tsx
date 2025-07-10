@@ -1,16 +1,9 @@
-"use client";
-import { getTransactions } from "@/lib/storage";
-import { useEffect, useState } from "react";
-import { Transaction } from "@/types";
 import BalanceSummary from "@/components/BalanceSummary";
 import { cn } from "@/lib/utils";
+import { getTransactions } from "../transaction.actions";
 
-export default function TransactionsPage() {
-  const [data, setData] = useState<Transaction[]>([]);
-
-  useEffect(() => {
-    setData(getTransactions());
-  }, []);
+export default async function TransactionsPage() {
+  const data = await getTransactions();
 
   return (
     <div className="p-4">
