@@ -31,7 +31,7 @@ export function AddTransactionForm({ categories }: { categories: Category[] }) {
   const form = useForm({
     resolver: zodResolver(createTransactionSchema),
     defaultValues: {
-      amount: 1,
+      amount: 0,
       date: new Date(),
       type: "expense",
       category: "",
