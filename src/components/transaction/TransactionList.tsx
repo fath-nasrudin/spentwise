@@ -19,7 +19,7 @@ export function TransactionList({ data }: { data: Transaction[] }) {
             {tx.type === "income" ? "+" : "-"}Rp{tx.amount}
           </div>
           <div className="text-sm text-gray-500">
-            {new Date(tx.date).toLocaleString()}
+            {new Date(tx.date).toLocaleDateString()}
           </div>
         </div>
       ))}
