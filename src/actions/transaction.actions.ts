@@ -13,12 +13,8 @@ export async function createTransaction(data: CreateTransactionSchema) {
   }
 
   await prisma.transaction.create({
-    data: {
-      ...data,
-      userId: session.user.id,
-    },
+    data: { ...data, userId: session.user.id },
   });
-
   revalidatePath("/transactions");
 }
 

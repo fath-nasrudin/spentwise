@@ -24,10 +24,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createTransaction } from "@/actions/transaction.actions";
-import { Category } from "@/generated/prisma";
+import { Category, Wallet } from "@/generated/prisma";
 import { useEffect, useState } from "react";
 
-export function AddTransactionForm({ categories }: { categories: Category[] }) {
+type AddTransactionFormProps = { categories: Category[]; wallets: Wallet[] };
+
+export function AddTransactionForm({
+  categories,
+  wallets,
+}: AddTransactionFormProps) {
   const form = useForm({
     resolver: zodResolver(createTransactionSchema),
     defaultValues: {
@@ -36,6 +41,7 @@ export function AddTransactionForm({ categories }: { categories: Category[] }) {
       type: "expense",
       category: "",
       note: "",
+      walletId: "",
     },
   });
 
@@ -106,6 +112,36 @@ export function AddTransactionForm({ categories }: { categories: Category[] }) {
                   <SelectContent>
                     <SelectItem value="income">income</SelectItem>
                     <SelectItem value="expense">expense</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* wallets */}
+          <FormField
+            control={form.control}
+            name="walletId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="sr-only">Wallet</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  value={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="wallet" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {wallets?.map((wallet) => (
+                      <SelectItem key={wallet.id} value={wallet.id}>
+                        {wallet.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
