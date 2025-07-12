@@ -54,3 +54,54 @@ export async function getUserWallets() {
     return { data: [], message: "Something went wrong" };
   }
 }
+
+export async function getUserWalletsWithBalance() {
+  try {
+    const session = await auth();
+    if (!session || !session.user || !session.user.id) {
+      return { data: [], message: "Unauthorized. Please login first" };
+    }
+    const userId = session.user.id;
+
+    const wallets = await prisma.wallet.findMany({
+      where: { userId: session.user.id },
+      select: { id: true, name: true },
+    });
+
+    const balances = await prisma.transaction.groupBy({
+      by: ["walletId", "type"],
+      _sum: {
+        amount: true,
+      },
+      where: {
+        wallet: {
+          userId: userId,
+        },
+      },
+    });
+
+    const walletBalances: Record<string, number> = {};
+
+    for (const row of balances) {
+      const walletId = row.walletId;
+      const amount = row._sum.amount ?? 0;
+
+      if (!(walletId in walletBalances)) {
+        walletBalances[walletId] = 0;
+      }
+
+      if (row.type === "income") walletBalances[walletId] += amount;
+      else if (row.type === "expense") walletBalances[walletId] -= amount;
+    }
+
+    const data = wallets.map((wallet) => ({
+      id: wallet.id,
+      name: wallet.name,
+      balance: walletBalances[wallet.id] ?? 0,
+    }));
+
+    return { data };
+  } catch (error) {
+    return { data: [], message: "Something went wrong" };
+  }
+}
