@@ -37,12 +37,13 @@ export function AddTransactionForm() {
       </div>
       <Button
         onClick={async () => {
-          console.log({ date });
-          const formData = new FormData();
-          formData.append("amount", amount.toString());
-          formData.append("type", type);
-          formData.append("date", date?.toISOString() || "");
-          await createTransaction(formData);
+          await createTransaction({
+            type,
+            category: "",
+            note: "",
+            date: date ? new Date(date) : new Date(),
+            amount: Number(amount),
+          });
         }}
       >
         Simpan
