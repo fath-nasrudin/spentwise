@@ -14,7 +14,10 @@ export default async function DashboardPage() {
   return (
     <div>
       <h1>Dashboard</h1>
-      if ()
+      <div>
+        <p>{session.user.name}</p>
+        <p>{session.user.id}</p>
+      </div>
       <SignOutButton />
       <UserAvatar />
     </div>
