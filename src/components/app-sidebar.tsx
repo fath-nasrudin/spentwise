@@ -1,8 +1,6 @@
 import {
   ArrowLeftRightIcon,
-  Calendar,
-  Inbox,
-  Search,
+  GoalIcon,
   Settings,
   TagsIcon,
   WalletIcon,
@@ -36,6 +34,11 @@ const items = [
     title: "Wallets",
     url: "/wallets",
     icon: WalletIcon,
+  },
+  {
+    title: "Budgets",
+    url: "/budgets",
+    icon: GoalIcon,
   },
   {
     title: "Settings",
