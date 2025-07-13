@@ -94,7 +94,6 @@ model Transaction {
   id        String   @id @default(cuid())
   amount    Int
   type      TransactionType
-  category  String
   note      String?
   date      DateTime @default(now())
 
@@ -106,6 +105,9 @@ model Transaction {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  categoryId String
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 enum TransactionType {
@@ -122,6 +124,7 @@ model Category {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   BudgetCategory BudgetCategory[]
+  transactions Transaction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

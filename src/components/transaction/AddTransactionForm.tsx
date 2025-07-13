@@ -39,7 +39,7 @@ export function AddTransactionForm({
       amount: 0,
       date: new Date(),
       type: "expense",
-      category: "",
+      categoryId: "",
       note: "",
       walletId: "",
     },
@@ -50,7 +50,7 @@ export function AddTransactionForm({
   useEffect(() => {
     const filtered = categories.filter((cat) => cat.type === type);
     setFilteredCategories(filtered);
-    form.setValue("category", "");
+    form.setValue("categoryId", "");
   }, [type, categories, form]);
 
   async function onSubmit(data: CreateTransactionSchema) {
@@ -151,7 +151,7 @@ export function AddTransactionForm({
 
           <FormField
             control={form.control}
-            name="category"
+            name="categoryId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="sr-only">Category</FormLabel>
