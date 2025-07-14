@@ -1,12 +1,12 @@
 import BalanceSummary from "@/components/BalanceSummary";
-import { getTransactions } from "./transaction.actions";
+import { getUserTransactions } from "./transaction.actions";
 import { AddTransactionForm } from "@/app/transactions/AddTransactionForm";
 import { TransactionList } from "@/app/transactions/TransactionList";
 import { getUserCategories } from "../categories/category.db";
 import { getUserWallets } from "../wallets/wallet.actions";
 
 export default async function TransactionsPage() {
-  const data = await getTransactions();
+  const { data } = await getUserTransactions();
   let { data: categories } = await getUserCategories();
   let { data: walelts } = await getUserWallets();
 
