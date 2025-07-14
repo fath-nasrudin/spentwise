@@ -37,6 +37,22 @@ export async function updateUserTransaction(
   return { success: true, data: updated };
 }
 
+export async function deleteUserTransaction(id: string) {
+  const session = await auth();
+
+  if (!session || !session.user || !session.user.id) {
+    return { message: "Unauthorized. Please login first" };
+  }
+
+  const deleted = await prisma.transaction.delete({ where: { id } });
+  revalidatePath("/transactions");
+  return {
+    success: true,
+    data: deleted,
+    message: "Success delete the transaction",
+  };
+}
+
 export async function getUserTransactions() {
   const session = await auth();
 

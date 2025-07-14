@@ -1,6 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import {
+  deleteUserTransaction,
   getUserTransactions,
   updateUserTransaction,
 } from "./transaction.actions";
@@ -81,7 +82,18 @@ export function TransactionList({
       console.error("Error happened", error);
     }
   };
-  const handleDeleteTransaction = () => console.log("transaction deleteed");
+  const handleDeleteTransaction = async (id: Transaction["id"]) => {
+    try {
+      const result = await deleteUserTransaction(id);
+      if (result?.message) {
+        console.info(result.message);
+      }
+    } catch (error) {
+      setIsEditDialogOpen(false);
+      setSelectedTransaction(null);
+      console.error("Error happened", error);
+    }
+  };
   const columns = createTransactionColumns({
     onEdit: handleEditTransaction,
     onDelete: handleDeleteTransaction,
