@@ -184,8 +184,9 @@ export function BudgetForm({
                       step="0.01"
                       placeholder="0.00"
                       {...field}
+                      value={field.value?.toString() ?? ""}
                       onChange={(e) =>
-                        field.onChange(parseFloat(e.target.value) || 0)
+                        field.onChange(parseFloat(e.target.value as string))
                       }
                     />
                   </FormControl>
