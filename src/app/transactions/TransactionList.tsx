@@ -1,9 +1,22 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { getUserTransactions } from "./transaction.actions";
+import {
+  getUserTransactions,
+  updateUserTransaction,
+} from "./transaction.actions";
 import { Transaction } from "@/types";
 import { DataTable } from "./data-table";
 import { createTransactionColumns } from "./transaction.columns";
+import { useState } from "react";
+import { TransactionForm } from "./transaction-form";
+import { Category, Wallet } from "@/generated/prisma";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { UpdateTransactionSchema } from "./transaction.schema";
 
 const USE_TABLE = true;
 
@@ -32,10 +45,42 @@ export function TransactionCard({ tx }: { tx: Transaction }) {
 
 export function TransactionList({
   data,
+  categories,
+  wallets,
 }: {
   data: Awaited<ReturnType<typeof getUserTransactions>>["data"];
+  categories: Category[];
+  wallets: Wallet[];
 }) {
-  const handleEditTransaction = () => console.log("transaction edited");
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
+
+  const handleEditTransaction = (transaction: Transaction) => {
+    console.log("edit clicked");
+    setIsEditDialogOpen(true);
+    setSelectedTransaction(transaction);
+  };
+  const handleUpdateTransaction = async (data: UpdateTransactionSchema) => {
+    if (!selectedTransaction) return;
+
+    try {
+      const result = await updateUserTransaction(selectedTransaction.id, data);
+      if (result?.message) {
+        console.info(result.message);
+      } else {
+        console.info("Submitted");
+      }
+      if (result.success) {
+        setIsEditDialogOpen(false);
+        setSelectedTransaction(null);
+      }
+    } catch (error) {
+      setIsEditDialogOpen(false);
+      setSelectedTransaction(null);
+      console.error("Error happened", error);
+    }
+  };
   const handleDeleteTransaction = () => console.log("transaction deleteed");
   const columns = createTransactionColumns({
     onEdit: handleEditTransaction,
@@ -50,6 +95,19 @@ export function TransactionList({
       ) : (
         data.map((tx) => <TransactionCard key={tx.id} tx={tx} />)
       )}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Update Transaction</DialogTitle>
+          </DialogHeader>
+          <TransactionForm
+            categories={categories}
+            wallets={wallets}
+            onSubmit={handleUpdateTransaction}
+            initialData={selectedTransaction}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

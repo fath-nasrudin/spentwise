@@ -37,7 +37,11 @@ export default async function TransactionsPage() {
 
       {/*  */}
       <div>
-        <TransactionList data={data} />
+        <TransactionList
+          categories={categories}
+          wallets={walelts}
+          data={data}
+        />
       </div>
     </div>
   );

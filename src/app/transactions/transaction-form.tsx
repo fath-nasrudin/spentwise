@@ -23,30 +23,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createUserTransaction } from "@/app/transactions/transaction.actions";
 import { Category, Wallet } from "@/generated/prisma";
 import { useEffect, useState } from "react";
+import { Transaction } from "@/types";
 
 type TransactionFormProps = {
   categories: Category[];
   wallets: Wallet[];
   onSubmit: (data: CreateTransactionSchema) => void;
+  initialData?: Partial<Transaction | null>;
 };
 
 export function TransactionForm({
   categories,
   wallets,
   onSubmit,
+  initialData,
 }: TransactionFormProps) {
   const form = useForm({
     resolver: zodResolver(createTransactionSchema),
     defaultValues: {
-      amount: 0,
-      date: new Date(),
-      type: "expense",
-      categoryId: "",
-      note: "",
-      walletId: "",
+      amount: initialData?.amount || 0,
+      date: initialData?.date || new Date(),
+      type: initialData?.type || "expense",
+      categoryId: initialData?.categoryId || "",
+      note: initialData?.note || "",
+      walletId: initialData?.walletId || "",
     },
   });
 
@@ -55,7 +57,11 @@ export function TransactionForm({
   useEffect(() => {
     const filtered = categories.filter((cat) => cat.type === type);
     setFilteredCategories(filtered);
-    form.setValue("categoryId", "");
+
+    // if the current categoryId NOT APPEAR in filteredCategories, reset it
+    if (!filtered.find((c) => c.id === form.getValues("categoryId"))) {
+      form.setValue("categoryId", "");
+    }
   }, [type, categories, form]);
 
   function handleSubmit(data: CreateTransactionSchema) {

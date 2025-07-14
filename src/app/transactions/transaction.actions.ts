@@ -1,6 +1,9 @@
 "use server";
 
-import { CreateTransactionSchema } from "@/app/transactions/transaction.schema";
+import {
+  CreateTransactionSchema,
+  UpdateTransactionSchema,
+} from "@/app/transactions/transaction.schema";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
@@ -17,6 +20,21 @@ export async function createUserTransaction(data: CreateTransactionSchema) {
   });
   revalidatePath("/transactions");
   return { success: true };
+}
+
+export async function updateUserTransaction(
+  id: string,
+  data: UpdateTransactionSchema
+) {
+  const session = await auth();
+
+  if (!session || !session.user || !session.user.id) {
+    return { message: "Unauthorized. Please login first" };
+  }
+
+  const updated = await prisma.transaction.update({ where: { id }, data });
+  revalidatePath("/transactions");
+  return { success: true, data: updated };
 }
 
 export async function getUserTransactions() {

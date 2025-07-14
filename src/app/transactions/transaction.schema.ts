@@ -10,3 +10,4 @@ export const createTransactionSchema = z.object({
 });
 
 export type CreateTransactionSchema = z.infer<typeof createTransactionSchema>;
+export type UpdateTransactionSchema = Partial<CreateTransactionSchema>;
