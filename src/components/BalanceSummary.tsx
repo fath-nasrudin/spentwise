@@ -1,4 +1,4 @@
-import { getTransactions } from "@/actions/transaction.actions";
+import { getTransactions } from "@/app/transactions/transaction.actions";
 import { cn } from "@/lib/utils";
 
 export default async function BalanceSummary() {

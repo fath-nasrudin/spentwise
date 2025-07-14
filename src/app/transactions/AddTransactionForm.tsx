@@ -1,7 +1,7 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DatePicker } from "../DatePicker";
+import { DatePicker } from "../../components/DatePicker";
 import { useForm } from "react-hook-form";
 import {
   createTransactionSchema,
@@ -15,7 +15,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "../../components/ui/form";
 import {
   Select,
   SelectContent,
@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createTransaction } from "@/actions/transaction.actions";
+import { createTransaction } from "@/app/transactions/transaction.actions";
 import { Category, Wallet } from "@/generated/prisma";
 import { useEffect, useState } from "react";
 
