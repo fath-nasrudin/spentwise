@@ -16,6 +16,7 @@ export async function createUserTransaction(data: CreateTransactionSchema) {
     data: { ...data, userId: session.user.id },
   });
   revalidatePath("/transactions");
+  return { success: true };
 }
 
 export async function getUserTransactions() {
