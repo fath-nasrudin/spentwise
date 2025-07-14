@@ -30,6 +30,14 @@ export async function getUserTransactions() {
   const transactions = await prisma.transaction.findMany({
     where: { userId },
     orderBy: { date: "desc" },
+    include: {
+      category: {
+        select: { name: true, id: true },
+      },
+      wallet: {
+        select: { name: true, id: true },
+      },
+    },
   });
   return { data: transactions };
 }
