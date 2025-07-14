@@ -7,7 +7,7 @@ export const createBudgetSchema = z.object({
   type: z.enum(["BUDGET", "GOAL"]),
   period: z.enum(["WEEKLY", "MONTHLY", "QUARTERLY", "YEARLY", "CUSTOM"]),
   startDate: z.coerce.date(),
-  endDate: z.coerce.date().optional(),
+  endDate: z.coerce.date().optional().nullable(),
   categoryIds: z.array(z.string()).min(1, "At least one category is required"),
   walletId: z.string().optional(),
 });
