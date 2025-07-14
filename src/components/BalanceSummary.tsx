@@ -1,8 +1,8 @@
-import { getTransactions } from "@/app/transactions/transaction.actions";
+import { getUserTransactions } from "@/app/transactions/transaction.actions";
 import { cn } from "@/lib/utils";
 
 export default async function BalanceSummary() {
-  const tx = await getTransactions();
+  const { data: tx } = await getUserTransactions();
   const balance = tx.reduce((acc, t) => {
     return acc + (t.type === "income" ? t.amount : -t.amount);
   }, 0);
