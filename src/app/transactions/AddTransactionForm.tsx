@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createTransaction } from "@/app/transactions/transaction.actions";
+import { createUserTransaction } from "@/app/transactions/transaction.actions";
 import { Category, Wallet } from "@/generated/prisma";
 import { useEffect, useState } from "react";
 
@@ -55,7 +55,7 @@ export function AddTransactionForm({
 
   async function onSubmit(data: CreateTransactionSchema) {
     try {
-      const result = await createTransaction(data);
+      const result = await createUserTransaction(data);
       if (result?.message) {
         console.info(result.message);
       } else {
