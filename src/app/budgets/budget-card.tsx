@@ -55,7 +55,7 @@ export function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps) {
   useEffect(() => {
     setLoading(true);
     fetchBudgetDetail();
-  }, []);
+  }, [budget]);
 
   if (!budgetDetail || loading) {
     return <p>Loading...</p>;
