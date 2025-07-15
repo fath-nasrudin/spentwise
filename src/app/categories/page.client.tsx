@@ -33,7 +33,16 @@ export function CategoriesPageClient({
   }
 
   async function handleCreateCategory(values: CreateCategorySchema) {
-    setIsCreateDialogOpen(false);
+    try {
+      const result = await createCategory(values);
+      if (result.success) {
+        setIsCreateDialogOpen(false);
+      }
+
+      return result;
+    } catch (_) {
+      return { message: "Failed to create Category" };
+    }
   }
 
   return (

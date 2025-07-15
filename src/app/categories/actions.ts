@@ -28,8 +28,8 @@ export async function createCategory(data: CreateCategorySchema) {
         userId: session.user.id,
       },
     });
-
     revalidatePath("/categories");
+    return { success: true, message: "Success create category" };
   } catch (error) {
     console.error(error);
     return {

@@ -23,8 +23,12 @@ import { createCategory } from "./actions";
 import { CreateCategorySchema, createCategorySchema } from "./category.schema";
 import { Category } from "@/generated/prisma";
 
+type CreateCategoryReturn = Awaited<ReturnType<typeof createCategory>>;
+
 type Props = {
-  onSubmit: (data: CreateCategorySchema) => void;
+  onSubmit: (
+    data: CreateCategorySchema
+  ) => Promise<Pick<CreateCategoryReturn, "errors" | "message" | "success">>;
   initialData?: Partial<Category | null>;
 };
 
@@ -41,7 +45,7 @@ export function CategoryForm({ onSubmit, initialData }: Props) {
   // 2. Define a submit handler.
   async function handleSubmit(values: CreateCategorySchema) {
     try {
-      const result = await createCategory(values);
+      const result = await onSubmit(values);
 
       if (result?.errors) {
         Object.entries(result.errors).forEach(([field, messages]) => {
@@ -50,15 +54,11 @@ export function CategoryForm({ onSubmit, initialData }: Props) {
           });
         });
       } else if (result?.message) {
-        console.error(result.message);
-      } else {
-        console.info("Category created successfully!");
-        // redirect akan di-handle oleh server action
+        console.info(result.message);
       }
     } catch (_) {
       console.error("Something went wrong");
     }
-    onSubmit(values);
   }
 
   return (
