@@ -5,5 +5,7 @@ export const createCategorySchema = z.object({
   type: z.enum(["expense", "income"]),
 });
 
+export const updateCategorySchema = createCategorySchema.partial();
+
 export type CreateCategorySchema = z.infer<typeof createCategorySchema>;
-export type UpdateCategorySchema = Partial<CreateCategorySchema>;
+export type UpdateCategorySchema = z.infer<typeof updateCategorySchema>;

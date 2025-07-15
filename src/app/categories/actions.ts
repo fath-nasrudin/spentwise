@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import {
   CreateCategorySchema,
   createCategorySchema,
+  updateCategorySchema,
   UpdateCategorySchema,
 } from "./category.schema";
 import { revalidatePath } from "next/cache";
@@ -49,7 +50,7 @@ export async function updateCategory(id: string, data: UpdateCategorySchema) {
     return { message: "Unauthorized. Please Login First" };
   }
 
-  const validatedFields = createCategorySchema.safeParse(data);
+  const validatedFields = updateCategorySchema.safeParse(data);
 
   if (!validatedFields.success) {
     return {
