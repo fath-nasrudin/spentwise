@@ -122,7 +122,7 @@ export function BudgetList({
               </CardContent>
             </Card>
           ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))]">
               {filteredBudgets.map((budget) => (
                 <BudgetCard
                   key={budget.id}
@@ -136,7 +136,7 @@ export function BudgetList({
         </TabsContent>
 
         <TabsContent value="budgets" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))]">
             {filteredBudgets.map((budget) => (
               <BudgetCard
                 key={budget.id}
@@ -149,7 +149,7 @@ export function BudgetList({
         </TabsContent>
 
         <TabsContent value="goals" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))]">
             {filteredBudgets.map((budget) => (
               <BudgetCard
                 key={budget.id}
