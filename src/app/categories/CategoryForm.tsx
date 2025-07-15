@@ -21,19 +21,25 @@ import {
 } from "@/components/ui/select";
 import { createCategory } from "./actions";
 import { CreateCategorySchema, createCategorySchema } from "./category.schema";
+import { Category } from "@/generated/prisma";
 
-export function CategoryForm() {
+type Props = {
+  onSubmit: (data: CreateCategorySchema) => void;
+  initialData?: Partial<Category | null>;
+};
+
+export function CategoryForm({ onSubmit, initialData }: Props) {
   // 1. Define your form.
   const form = useForm<CreateCategorySchema>({
     resolver: zodResolver(createCategorySchema),
     defaultValues: {
-      name: "",
-      type: "expense",
+      name: initialData?.name || "",
+      type: initialData?.type || "expense",
     },
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: CreateCategorySchema) {
+  async function handleSubmit(values: CreateCategorySchema) {
     try {
       const result = await createCategory(values);
 
@@ -52,11 +58,12 @@ export function CategoryForm() {
     } catch (_) {
       console.error("Something went wrong");
     }
+    onSubmit(values);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="name"
