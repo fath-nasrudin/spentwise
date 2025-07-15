@@ -29,7 +29,7 @@ export function WalletsPageClient({ wallets }: Props) {
 
       return result;
     } catch (_) {
-      return { message: "Failed to create Category" };
+      return { message: "Failed to create wallet" };
     }
   }
 
@@ -50,7 +50,7 @@ export function WalletsPageClient({ wallets }: Props) {
         </Button>
       </div>{" "}
       {/*  */}
-      <WalletList wallets={wallets} />
+      <WalletList data={wallets} />
       {/* Dialogs */}
       {/* Create Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>

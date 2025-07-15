@@ -27,7 +27,7 @@ export function WalletForm({ onSubmit, initialData }: Props) {
   const form = useForm({
     resolver: zodResolver(createWalletSchema),
     defaultValues: {
-      name: "",
+      name: initialData?.name || "",
     },
   });
 
@@ -66,7 +66,7 @@ export function WalletForm({ onSubmit, initialData }: Props) {
             </FormItem>
           )}
         />
-        <Button type="submit">Create</Button>
+        <Button type="submit">{initialData ? "Save" : "Create"}</Button>
       </form>
     </Form>
   );
