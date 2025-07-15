@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { IBudgetCard } from "@/types/budget";
 
@@ -38,24 +38,26 @@ export function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps) {
     BudgetCardProps["budget"] | null
   >(null);
   const [loading, setLoading] = useState(false);
-  const fetchBudgetDetail = async () => {
+  const fetchBudgetDetail = useCallback(async () => {
     try {
       const response = await fetch(`/api/budgets/${budget.id}`);
       if (response.ok) {
         const data = await response.json();
         setBudgetDetail(data);
       }
-    } catch (error) {
+    } catch (_) {
       toast.error("Failed to fetch budget detail");
     } finally {
       setLoading(false);
     }
-  };
+  }, [budget]);
 
   useEffect(() => {
     setLoading(true);
     fetchBudgetDetail();
-  }, [budget]);
+
+    //
+  }, [fetchBudgetDetail]);
 
   if (!budgetDetail || loading) {
     return <p>Loading...</p>;

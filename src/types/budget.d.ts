@@ -16,7 +16,7 @@ interface IBudgetBase {
   description?: string;
   amount: number;
   type: "BUDGET" | "GOAL";
-  period: string;
+  period: "WEEKLY" | "MONTHLY" | "QUARTERLY" | "YEARLY" | "CUSTOM";
   startDate: Date;
   endDate?: Date;
   spentAmount: number;
@@ -36,6 +36,5 @@ interface IBudgetBase {
   };
 }
 
-export interface IBudgetCard extends IBudgetBase {}
-
-export interface IBudgetClient extends IBudgetBase {}
+export type IBudgetCard = IBudgetBase;
+export type IBudgetClient = IBudgetBase;

@@ -49,7 +49,7 @@ export function CategoryForm() {
         console.info("Category created successfully!");
         // redirect akan di-handle oleh server action
       }
-    } catch (error) {
+    } catch (_) {
       console.error("Something went wrong");
     }
   }

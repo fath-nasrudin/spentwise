@@ -2,7 +2,7 @@ import { UserAvatar } from "@/components/UserAvatar";
 import { SignOutButton } from "@/components/SignOutButton";
 
 import { auth } from "@/lib/auth";
-import { redirect, RedirectType } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
   const session = await auth();

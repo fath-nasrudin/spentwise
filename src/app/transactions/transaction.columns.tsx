@@ -118,8 +118,8 @@ export const createTransactionColumns = ({
                   <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                   <AlertDialogDescription>
                     This action cannot be undone. This will permanently delete
-                    the transaction "
-                    {transaction.note || `Transaction ${transaction.id}`}".
+                    the transaction &quot;
+                    {transaction.note || `Transaction ${transaction.id}`}&quot;.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

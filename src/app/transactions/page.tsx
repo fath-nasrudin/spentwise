@@ -8,8 +8,8 @@ import { AddTransactionFormDialogButton } from "./add-transaction-form-dialog";
 
 export default async function TransactionsPage() {
   const { data } = await getUserTransactions();
-  let { data: categories } = await getUserCategories();
-  let { data: walelts } = await getUserWallets();
+  const { data: categories } = await getUserCategories();
+  const { data: walelts } = await getUserWallets();
 
   if (!data) {
     return <div className="p-4">No transaction found.</div>;

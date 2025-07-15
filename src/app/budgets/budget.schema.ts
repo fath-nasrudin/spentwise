@@ -13,3 +13,4 @@ export const createBudgetSchema = z.object({
 });
 
 export type BudgetCreateInput = z.infer<typeof createBudgetSchema>;
+export type BudgetUpdateInput = Partial<BudgetCreateInput>;

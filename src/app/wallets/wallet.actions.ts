@@ -50,7 +50,7 @@ export async function getUserWallets() {
       where: { userId: session.user.id },
     });
     return { data };
-  } catch (error) {
+  } catch (_) {
     return { data: [], message: "Something went wrong" };
   }
 }
@@ -101,7 +101,7 @@ export async function getUserWalletsWithBalance() {
     }));
 
     return { data };
-  } catch (error) {
+  } catch (_) {
     return { data: [], message: "Something went wrong" };
   }
 }

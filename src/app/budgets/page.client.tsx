@@ -22,7 +22,7 @@ import {
 import { BudgetForm } from "./budget-form";
 import { BudgetList } from "./budget-list";
 import { IBudgetClient } from "@/types/budget";
-import { BudgetCreateInput } from "./budget.schema";
+import { BudgetCreateInput, BudgetUpdateInput } from "./budget.schema";
 
 interface Category {
   id: string;
@@ -65,7 +65,7 @@ export default function BudgetsPage({
         const data = await response.json();
         setBudgets(data);
       }
-    } catch (error) {
+    } catch (_) {
       toast.error("Failed to fetch budgets");
     } finally {
       setLoading(false);
@@ -92,7 +92,7 @@ export default function BudgetsPage({
       } else {
         toast.error("Failed to create budget");
       }
-    } catch (error) {
+    } catch (_) {
       toast.error("Failed to create budget");
     }
   };
@@ -106,7 +106,7 @@ export default function BudgetsPage({
     }
   };
 
-  const handleUpdateBudget = async (data: any) => {
+  const handleUpdateBudget = async (data: BudgetUpdateInput) => {
     if (!selectedBudget) return;
 
     try {
@@ -131,7 +131,7 @@ export default function BudgetsPage({
       } else {
         toast.error("Failed to update budget");
       }
-    } catch (error) {
+    } catch (_) {
       toast.error("Failed to update budget");
     }
   };
@@ -165,7 +165,7 @@ export default function BudgetsPage({
       } else {
         toast.error("Failed to delete budget");
       }
-    } catch (error) {
+    } catch (_) {
       toast.error("Failed to delete budget");
     }
   };
@@ -177,7 +177,7 @@ export default function BudgetsPage({
       description: budget.description,
       amount: budget.amount,
       type: budget.type,
-      period: budget.period as any,
+      period: budget.period,
       startDate: budget.startDate,
       endDate: budget.endDate,
       categoryIds: budget.budgetCategories.map((bc) => bc.category.id),
@@ -246,8 +246,8 @@ export default function BudgetsPage({
               Delete {selectedBudget?.type === "BUDGET" ? "Budget" : "Goal"}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{selectedBudget?.name}"? This
-              action cannot be undone.
+              Are you sure you want to delete &quot;{selectedBudget?.name}
+              &quot;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
