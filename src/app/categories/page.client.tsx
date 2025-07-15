@@ -45,10 +45,8 @@ export function CategoriesPageClient({
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Budgets & Goals</h1>
-          <p className="text-muted-foreground">
-            Track your spending limits and savings targets
-          </p>
+          <h1 className="text-3xl font-bold">Categories</h1>
+          <p className="text-muted-foreground">Manage your categories</p>
         </div>
         <Button onClick={onCreateNew} className="flex items-center gap-2">
           <PlusIcon className="h-4 w-4" />
