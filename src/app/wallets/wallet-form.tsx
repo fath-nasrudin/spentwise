@@ -15,7 +15,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { createUserWallet } from "./wallet.actions";
 
-export function WalletForm() {
+type CreateWalletReturn = Awaited<ReturnType<typeof createUserWallet>>;
+
+type Props = {
+  onSubmit: (
+    data: WalletCreateInput
+  ) => Promise<Pick<CreateWalletReturn, "errors" | "message" | "success">>;
+  initialData?: Partial<WalletCreateInput | null>;
+};
+export function WalletForm({ onSubmit, initialData }: Props) {
   const form = useForm({
     resolver: zodResolver(createWalletSchema),
     defaultValues: {
@@ -23,9 +31,9 @@ export function WalletForm() {
     },
   });
 
-  const onSubmit = async (data: WalletCreateInput) => {
+  const handleSubmit = async (data: WalletCreateInput) => {
     try {
-      const result = await createUserWallet(data);
+      const result = await onSubmit(data);
 
       if (result?.errors) {
         Object.entries(result.errors).forEach(([field, messages]) => {
@@ -37,7 +45,6 @@ export function WalletForm() {
         console.info(result.message);
       } else {
         console.error(result.message);
-        // redirect akan di-handle oleh server action
       }
     } catch (error) {
       console.error("Something went wrong", error);
@@ -45,7 +52,7 @@ export function WalletForm() {
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FormField
           name="name"
           control={form.control}
