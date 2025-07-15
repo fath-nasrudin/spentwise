@@ -59,7 +59,7 @@ export function CategoriesPageClient({
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Create New Budget or Goal</DialogTitle>
+            <DialogTitle>Create Category</DialogTitle>
           </DialogHeader>
           <CategoryForm onSubmit={handleCreateCategory} />
         </DialogContent>
