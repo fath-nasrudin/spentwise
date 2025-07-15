@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import { CategoryForm } from "./CategoryForm";
 import { UpdateCategorySchema } from "./category.schema";
-import { updateCategory } from "./actions";
+import { deleteCategory, updateCategory } from "./actions";
 
 const USE_TABLE = true;
 
@@ -31,7 +31,6 @@ function CategoryListList({ categories }: { categories: Category[] }) {
 
 export function CategoryList({ data }: { data: Category[] }) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
@@ -56,9 +55,13 @@ export function CategoryList({ data }: { data: Category[] }) {
     }
   }
 
-  function handleDelete(id: string) {
-    console.log("try to delete");
-    console.log({ id });
+  async function handleDelete(id: string) {
+    try {
+      const result = await deleteCategory(id);
+      console.info(result.message);
+    } catch (_) {
+      console.info("Failed to delete category");
+    }
   }
 
   const columns = createCategoryColumns({

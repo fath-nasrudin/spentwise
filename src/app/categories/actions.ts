@@ -77,3 +77,27 @@ export async function updateCategory(id: string, data: UpdateCategorySchema) {
     };
   }
 }
+
+export async function deleteCategory(id: string) {
+  const session = await auth();
+
+  if (!session || !session.user || !session.user.id) {
+    return { message: "Unauthorized. Please Login First" };
+  }
+
+  try {
+    await prisma.category.delete({
+      where: {
+        id,
+      },
+    });
+
+    revalidatePath("/categories");
+    return { success: true, message: "Category successfully deleted!" };
+  } catch (error) {
+    console.error(error);
+    return {
+      message: "Database Error: Failed to delete category.",
+    };
+  }
+}
