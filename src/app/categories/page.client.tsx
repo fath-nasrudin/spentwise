@@ -11,8 +11,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CategoryForm } from "./CategoryForm";
-import { createCategory } from "./actions";
-import { CreateCategorySchema } from "./category.schema";
+import { createCategory, updateCategory } from "./actions";
+import { CreateCategorySchema, UpdateCategorySchema } from "./category.schema";
 
 export function CategoriesPageClient({
   categories,
@@ -20,11 +20,6 @@ export function CategoriesPageClient({
   categories: Category[];
 }) {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null
-  );
 
   function onCreateNew() {
     // handle something here

@@ -2,6 +2,16 @@ import { DataTable } from "@/components/data-table";
 import { cn } from "@/lib/utils";
 import { Category } from "@/types";
 import { createCategoryColumns } from "./category.columns";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import { CategoryForm } from "./CategoryForm";
+import { UpdateCategorySchema } from "./category.schema";
+import { updateCategory } from "./actions";
 
 const USE_TABLE = true;
 
@@ -20,18 +30,42 @@ function CategoryListList({ categories }: { categories: Category[] }) {
 }
 
 export function CategoryList({ data }: { data: Category[] }) {
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
+
   function handleEdit(category: Category) {
-    console.log("try to edit");
-    console.log({ category });
+    setIsEditDialogOpen(true);
+    setSelectedCategory(category);
   }
+  async function handleSubmitUpdate(category: UpdateCategorySchema) {
+    if (!selectedCategory) return {};
+
+    try {
+      const result = await updateCategory(selectedCategory.id, category);
+
+      if (result.success) {
+        setIsEditDialogOpen(false);
+        setSelectedCategory(null);
+      }
+      return result;
+    } catch (_) {
+      return { message: `Failed to update category ${category.name}` };
+    }
+  }
+
   function handleDelete(id: string) {
     console.log("try to delete");
     console.log({ id });
   }
+
   const columns = createCategoryColumns({
     onEdit: handleEdit,
     onDelete: handleDelete,
   });
+
   return (
     <div className="">
       <h2 className="text-xl font-bold mb-4">Categories</h2>
@@ -40,6 +74,19 @@ export function CategoryList({ data }: { data: Category[] }) {
       ) : (
         <CategoryListList categories={data} />
       )}
+
+      {/* update Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Category</DialogTitle>
+          </DialogHeader>
+          <CategoryForm
+            onSubmit={handleSubmitUpdate}
+            initialData={selectedCategory}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
