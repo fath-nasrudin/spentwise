@@ -1,4 +1,3 @@
-import { UserAvatar } from "@/components/UserAvatar";
 import { SignOutButton } from "@/components/SignOutButton";
 
 import { auth } from "@/lib/auth";
@@ -19,7 +18,6 @@ export default async function DashboardPage() {
         <p>{session.user.id}</p>
       </div>
       <SignOutButton />
-      <UserAvatar />
     </div>
   );
 }
