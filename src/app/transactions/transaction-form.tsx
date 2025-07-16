@@ -94,6 +94,26 @@ export function TransactionForm({
             )}
           />
 
+          {/* Note */}
+          <FormField
+            control={form.control}
+            name="note"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="sr-only">Category</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Note"
+                    {...field}
+                    value={field.value?.toString() ?? ""}
+                    onChange={(e) => field.onChange(e.target.value)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* type */}
           <FormField
             control={form.control}

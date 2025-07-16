@@ -1,29 +1,8 @@
 "use client";
 
 import { ActionsCell } from "@/components/table/actions-cell";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Transaction } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { EditIcon, MoreHorizontalIcon, Trash2Icon } from "lucide-react";
 
 interface ColumnsProps {
   onEdit: (transaction: Transaction) => void;
@@ -54,6 +33,12 @@ export const createTransactionColumns = ({
       return <div className="font-medium">{formatted}</div>;
     },
   },
+
+  {
+    accessorKey: "note",
+    header: "Note",
+  },
+
   {
     id: "wallet",
     header: "Wallet",
