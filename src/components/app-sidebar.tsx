@@ -1,12 +1,4 @@
 import {
-  ArrowLeftRightIcon,
-  GoalIcon,
-  Settings,
-  TagsIcon,
-  WalletIcon,
-} from "lucide-react";
-
-import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
@@ -17,35 +9,9 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { getSidebarMenu } from "@/data/nav.data";
 
-// Menu items.
-const items = [
-  {
-    title: "Categories",
-    url: "/categories",
-    icon: TagsIcon,
-  },
-  {
-    title: "Transactions",
-    url: "/transactions",
-    icon: ArrowLeftRightIcon,
-  },
-  {
-    title: "Wallets",
-    url: "/wallets",
-    icon: WalletIcon,
-  },
-  {
-    title: "Budgets",
-    url: "/budgets",
-    icon: GoalIcon,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
+const items = getSidebarMenu();
 
 export function AppSidebar() {
   return (
