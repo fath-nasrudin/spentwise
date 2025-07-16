@@ -8,7 +8,7 @@ import { DataTable } from "@/components/data-table";
 import { createWalletColumns } from "./wallet.columns";
 import { useState } from "react";
 import { WalletForm } from "./wallet-form";
-import { Category, Wallet } from "@/generated/prisma";
+import { Wallet } from "@/generated/prisma";
 import {
   Dialog,
   DialogContent,
