@@ -3,7 +3,7 @@
 import {
   CreateTransactionSchema,
   UpdateTransactionSchema,
-} from "@/app/transactions/transaction.schema";
+} from "@/app/dashboard/transactions/transaction.schema";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";

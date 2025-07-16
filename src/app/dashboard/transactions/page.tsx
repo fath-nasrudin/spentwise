@@ -1,6 +1,6 @@
 import BalanceSummary from "@/components/BalanceSummary";
 import { getUserTransactions } from "./transaction.actions";
-import { TransactionList } from "@/app/transactions/TransactionList";
+import { TransactionList } from "@/app/dashboard/transactions/TransactionList";
 import { getUserCategories } from "../categories/category.db";
 import { getUserWallets } from "../wallets/wallet.actions";
 

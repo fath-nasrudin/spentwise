@@ -1,12 +1,12 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DatePicker } from "../../components/DatePicker";
+import { DatePicker } from "../../../components/DatePicker";
 import { useForm } from "react-hook-form";
 import {
   createTransactionSchema,
   CreateTransactionSchema,
-} from "@/app/transactions/transaction.schema";
+} from "@/app/dashboard/transactions/transaction.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -15,7 +15,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../components/ui/form";
+} from "../../../components/ui/form";
 import {
   Select,
   SelectContent,

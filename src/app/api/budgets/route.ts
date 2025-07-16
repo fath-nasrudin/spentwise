@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 }
 
 // POST /api/budgets - Create new budget/goal
-import { createBudgetSchema } from "@/app/budgets/budget.schema";
+import { createBudgetSchema } from "@/app/dashboard/budgets/budget.schema";
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const session = await auth();

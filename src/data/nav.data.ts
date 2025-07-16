@@ -10,22 +10,22 @@ export function getSidebarMenu() {
   return [
     {
       title: "Categories",
-      url: "/categories",
+      url: "/dashboard/categories",
       icon: TagsIcon,
     },
     {
       title: "Transactions",
-      url: "/transactions",
+      url: "/dashboard/transactions",
       icon: ArrowLeftRightIcon,
     },
     {
       title: "Wallets",
-      url: "/wallets",
+      url: "/dashboard/wallets",
       icon: WalletIcon,
     },
     {
       title: "Budgets",
-      url: "/budgets",
+      url: "/dashboard/budgets",
       icon: GoalIcon,
     },
     {

@@ -1,4 +1,4 @@
-import { getUserTransactions } from "@/app/transactions/transaction.actions";
+import { getUserTransactions } from "@/app/dashboard/transactions/transaction.actions";
 
 export type Transaction = Awaited<
   ReturnType<typeof getUserTransactions>
