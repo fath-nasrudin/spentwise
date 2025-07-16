@@ -14,18 +14,190 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+
+  Transactions Transaction[]
+  Categories   Category[]
+  Wallets Wallet[]
+  Budget Budget[]
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
+}
+ 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
+}
+ 
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([userId, credentialID])
+}
+
 model Transaction {
   id        String   @id @default(cuid())
   amount    Int
   type      TransactionType
-  category  String
   note      String?
   date      DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  walletId    String
+  wallet      Wallet     @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  categoryId String
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 enum TransactionType {
   income
   expense
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  type      TransactionType
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  BudgetCategory BudgetCategory[]
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Wallet {
+  id        String @id @default(cuid())
+  name      String
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  Transactions Transaction[]
+  Budget Budget[]   
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Budget model - can be budget (limit) or goal (target)
+model Budget {
+  id          String     @id @default(cuid())
+  name        String     // e.g., "Monthly Groceries", "Emergency Fund Goal"
+  description String?
+  amount      Decimal    @db.Decimal(10, 2) // budget limit or goal target
+  type        BudgetType @default(BUDGET) // BUDGET or GOAL
+  period      BudgetPeriod // MONTHLY, WEEKLY, YEARLY, CUSTOM
+  startDate   DateTime
+  endDate     DateTime?
+  isActive    Boolean    @default(true)
+  
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  walletId    String?  // optional - budget can be wallet-specific
+  wallet      Wallet?  @relation(fields: [walletId], references: [id], onDelete: SetNull)
+  
+  // Many-to-many relationship with categories
+  budgetCategories BudgetCategory[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("budgets")
+}
+
+// Junction table for Budget-Category many-to-many relationship
+model BudgetCategory {
+  id         String   @id @default(cuid())
+  budgetId   String
+  categoryId String
+  
+  // Relations
+  budget     Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  // Composite unique constraint
+  @@unique([budgetId, categoryId])
+  @@map("budget_categories")
+}
+
+// Budget type enum
+enum BudgetType {
+  BUDGET  // Spending limit (don't exceed)
+  GOAL    // Savings target (aim to reach)
+}
+
+// Budget period enum
+enum BudgetPeriod {
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+  CUSTOM
 }

@@ -1,18 +1,48 @@
 import BalanceSummary from "@/components/BalanceSummary";
-import { getTransactions } from "../../actions/transaction.actions";
-import { AddTransactionForm } from "@/components/transaction/AddTransactionForm";
-import { TransactionList } from "@/components/transaction/TransactionList";
+import { getUserTransactions } from "./transaction.actions";
+import { TransactionList } from "@/app/transactions/TransactionList";
+import { getUserCategories } from "../categories/category.db";
+import { getUserWallets } from "../wallets/wallet.actions";
+
+import { AddTransactionFormDialogButton } from "./add-transaction-form-dialog";
 
 export default async function TransactionsPage() {
-  const data = await getTransactions();
+  const { data } = await getUserTransactions();
+  const { data: categories } = await getUserCategories();
+  const { data: walelts } = await getUserWallets();
+
   if (!data) {
-    return <div className="p-4">Tidak ada transaksi yang ditemukan.</div>;
+    return <div className="p-4">No transaction found.</div>;
   }
   return (
-    <div className="p-4 max-w-7xl mx-auto">
-      <AddTransactionForm />
-      <BalanceSummary />
-      <TransactionList data={data} />
+    <div className="container w-full max-w-7xl mx-auto p-6 space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold">Transactions</h1>
+          <p className="text-muted-foreground">
+            See your whole transactions here
+          </p>
+        </div>
+        <AddTransactionFormDialogButton
+          categories={categories}
+          wallets={walelts}
+        />
+      </div>
+
+      {/*  */}
+      <div>
+        <BalanceSummary />
+      </div>
+
+      {/*  */}
+      <div>
+        <TransactionList
+          categories={categories}
+          wallets={walelts}
+          data={data}
+        />
+      </div>
     </div>
   );
 }
