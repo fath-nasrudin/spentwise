@@ -3,6 +3,7 @@ import authConfig from "./auth.config";
 
 import { PrismaClient } from "@/generated/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { createDefaultDataForUser } from "../create-default-data-for-user";
 
 const prisma = new PrismaClient();
 
@@ -21,6 +22,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     session({ session, token }) {
       session.user.id = token.id as string;
       return session;
+    },
+  },
+  events: {
+    createUser: async ({ user }) => {
+      if (!user.id) return;
+      await createDefaultDataForUser(user.id);
     },
   },
   ...authConfig,
