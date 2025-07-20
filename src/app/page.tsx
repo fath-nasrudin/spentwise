@@ -1,4 +1,4 @@
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { SiGithub } from "react-icons/si";
 import Link from "next/link";
 
@@ -10,9 +10,14 @@ export default function Home() {
         <p className="">Know where your money gone</p>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <Button>Demo</Button>
-          <Link href="/login" className="cursor-pointer">
-            <Button variant={"secondary"}>Login</Button>
+          <Link href="#" className={buttonVariants()}>
+            Demo
+          </Link>
+          <Link
+            href="/login"
+            className={buttonVariants({ variant: "secondary" })}
+          >
+            Login
           </Link>
         </div>
       </main>
