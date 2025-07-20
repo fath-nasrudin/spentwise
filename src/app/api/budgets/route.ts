@@ -32,9 +32,9 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(budgets);
 }
-
 // POST /api/budgets - Create new budget/goal
 import { createBudgetSchema } from "@/app/dashboard/budgets/budget.schema";
+import { getBudgetPeriodRange } from "./get-budget-period-range";
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const session = await auth();
@@ -55,10 +55,16 @@ export async function POST(request: NextRequest) {
     );
   }
   const { categoryIds, ...budgetData } = parseResult.data;
+  const periodRange = getBudgetPeriodRange({
+    startDate: budgetData.startDate,
+    period: budgetData.period,
+    customEndDate: budgetData.endDate,
+  });
 
   const budget = await prisma.budget.create({
     data: {
       ...budgetData,
+      ...periodRange,
       userId,
       budgetCategories: {
         create: categoryIds.map((categoryId: string) => ({
