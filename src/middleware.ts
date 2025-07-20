@@ -10,6 +10,12 @@ export async function middleware(req: NextRequest) {
   const session = await auth();
 
   const protectedPath = req.nextUrl.pathname.startsWith("/dashboard");
+  const loginPath = req.nextUrl.pathname.startsWith("/login");
+
+  if (loginPath && session?.user) {
+    const dashboardUrl = new URL("/dashboard", req.url);
+    return NextResponse.redirect(dashboardUrl);
+  }
 
   if (protectedPath && !session?.user) {
     const loginUrl = new URL("/login", req.url);
@@ -21,5 +27,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/login"],
 };
