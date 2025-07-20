@@ -3,8 +3,12 @@ import { getUserTransactions } from "./transaction.actions";
 import { TransactionList } from "@/app/dashboard/transactions/TransactionList";
 import { getUserCategories } from "../categories/category.db";
 import { getUserWallets } from "../wallets/wallet.actions";
-
 import { AddTransactionFormDialogButton } from "./add-transaction-form-dialog";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Transactions",
+};
 
 export default async function TransactionsPage() {
   const { data } = await getUserTransactions();
