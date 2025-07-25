@@ -1,9 +1,12 @@
-import { getUserTransactions } from "@/app/dashboard/transactions/transaction.actions";
 import { cn } from "@/lib/utils";
+import { Transaction } from "@/types";
 
-export default async function BalanceSummary() {
-  const { data: tx } = await getUserTransactions();
-  const balance = tx.reduce((acc, t) => {
+export default function BalanceSummary({
+  transactions,
+}: {
+  transactions: Transaction[];
+}) {
+  const balance = transactions.reduce((acc, t) => {
     return acc + (t.type === "income" ? t.amount : -t.amount);
   }, 0);
 
