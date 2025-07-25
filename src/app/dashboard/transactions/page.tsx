@@ -1,19 +1,20 @@
-import BalanceSummary from "@/components/BalanceSummary";
 import { getUserTransactions } from "./transaction.actions";
-import { TransactionList } from "@/app/dashboard/transactions/TransactionList";
 import { getUserCategories } from "../categories/category.db";
 import { getUserWallets } from "../wallets/wallet.actions";
-
+import { Metadata } from "next";
+import { TransactionsTable } from "./transactions-table";
 import { AddTransactionFormDialogButton } from "./add-transaction-form-dialog";
+import BalanceSummary from "@/components/BalanceSummary";
+
+export const metadata: Metadata = {
+  title: "Transactions",
+};
 
 export default async function TransactionsPage() {
-  const { data } = await getUserTransactions();
+  const { data: transactions } = await getUserTransactions();
   const { data: categories } = await getUserCategories();
   const { data: walelts } = await getUserWallets();
 
-  if (!data) {
-    return <div className="p-4">No transaction found.</div>;
-  }
   return (
     <div className="container w-full max-w-7xl mx-auto p-6 space-y-6">
       {/* Header */}
@@ -32,17 +33,15 @@ export default async function TransactionsPage() {
 
       {/*  */}
       <div>
-        <BalanceSummary />
+        <BalanceSummary transactions={transactions} />
       </div>
 
       {/*  */}
-      <div>
-        <TransactionList
-          categories={categories}
-          wallets={walelts}
-          data={data}
-        />
-      </div>
+      <TransactionsTable
+        transactions={transactions}
+        categories={categories}
+        wallets={walelts}
+      />
     </div>
   );
 }

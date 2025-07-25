@@ -4,6 +4,7 @@ import {
   CreateTransactionSchema,
   UpdateTransactionSchema,
 } from "@/app/dashboard/transactions/transaction.schema";
+import { Prisma } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
@@ -53,7 +54,9 @@ export async function deleteUserTransaction(id: string) {
   };
 }
 
-export async function getUserTransactions() {
+export async function getUserTransactions(
+  options?: Pick<Prisma.TransactionFindManyArgs, "where">
+) {
   const session = await auth();
 
   if (!session || !session.user || !session.user.id) {
@@ -62,7 +65,7 @@ export async function getUserTransactions() {
   const userId = session.user.id;
 
   const transactions = await prisma.transaction.findMany({
-    where: { userId },
+    where: { ...options?.where, userId },
     orderBy: { date: "desc" },
     include: {
       category: {
