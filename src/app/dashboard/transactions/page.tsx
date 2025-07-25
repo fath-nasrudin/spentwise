@@ -2,37 +2,9 @@ import { getUserTransactions } from "./transaction.actions";
 import { getUserCategories } from "../categories/category.db";
 import { getUserWallets } from "../wallets/wallet.actions";
 import { Metadata } from "next";
-
-import {
-  startOfDay,
-  endOfDay,
-  startOfMonth,
-  endOfMonth,
-  startOfYear,
-  endOfYear,
-} from "date-fns";
 import { TransactionsTable } from "./transactions-table";
 import { AddTransactionFormDialogButton } from "./add-transaction-form-dialog";
 import BalanceSummary from "@/components/BalanceSummary";
-
-export function getDateRange(type: "day" | "month" | "year", baseDate: Date) {
-  if (type === "day") {
-    return {
-      gte: startOfDay(baseDate),
-      lte: endOfDay(baseDate),
-    };
-  }
-  if (type === "month") {
-    return {
-      gte: startOfMonth(baseDate),
-      lte: endOfMonth(baseDate),
-    };
-  }
-  return {
-    gte: startOfYear(baseDate),
-    lte: endOfYear(baseDate),
-  };
-}
 
 export const metadata: Metadata = {
   title: "Transactions",
