@@ -76,5 +76,5 @@ export async function getUserTransactions(
       },
     },
   });
-  return { data: transactions };
+  return { data: transactions, success: true };
 }
