@@ -1,5 +1,5 @@
 "use client";
-import { TransactionList } from "@/app/dashboard/transactions/transaction-list-2";
+import { TransactionList } from "@/app/dashboard/transactions/transaction-list";
 import { getUserCategories } from "../categories/category.db";
 import { getUserWallets } from "../wallets/wallet.actions";
 import { Metadata } from "next";
