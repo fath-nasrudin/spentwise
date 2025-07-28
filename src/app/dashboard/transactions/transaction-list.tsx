@@ -16,7 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { UpdateTransactionSchema } from "./transaction.schema";
-import { useGetTransactions } from "./hooks/use-get-transactions";
+import { useGetTransactions } from "./hooks/use-transactions";
 import { TableSkeleton } from "@/components/skeletons/table-skeleton";
 
 export function TransactionList({
