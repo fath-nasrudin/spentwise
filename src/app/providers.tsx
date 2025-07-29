@@ -1,5 +1,5 @@
 "use client";
-
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClientProvider } from "@/lib/query/client";
 
 export function Providers({
@@ -7,5 +7,9 @@ export function Providers({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <QueryClientProvider>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider>
+      {children} <ReactQueryDevtools />
+    </QueryClientProvider>
+  );
 }
