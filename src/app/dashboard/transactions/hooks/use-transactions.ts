@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createUserTransaction,
   getUserTransactions,
+  updateUserTransaction,
 } from "../transaction.actions";
 import { toast } from "sonner";
 
@@ -40,6 +41,39 @@ export function useCreateTransaction() {
     },
     onError: (error) => {
       console.error("Failed to create transaction:", error);
+    },
+  });
+}
+
+export function useUpdateTransaction() {
+  const queryClient = useQueryClient();
+
+  /**
+   * {
+      id,
+      data,
+    }: {
+      id: Parameters<typeof updateUserTransaction>[0];
+      data: Parameters<typeof updateUserTransaction>[1];
+    }
+   */
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: Parameters<typeof updateUserTransaction>[0];
+      data: Parameters<typeof updateUserTransaction>[1];
+    }) => {
+      return updateUserTransaction(id, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [TRANSACTION_KEY] });
+      toast.success("Success update transaction");
+    },
+    onError: (error) => {
+      console.error("Failed to update transaction:", error);
+      toast.error("Failed to update transaction");
     },
   });
 }

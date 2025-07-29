@@ -1,8 +1,5 @@
 "use client";
-import {
-  deleteUserTransaction,
-  updateUserTransaction,
-} from "./transaction.actions";
+import { deleteUserTransaction } from "./transaction.actions";
 import { Transaction } from "@/types";
 import { DataTable } from "./data-table";
 import { createTransactionColumns } from "./transaction.columns";
@@ -16,8 +13,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { UpdateTransactionSchema } from "./transaction.schema";
-import { useGetTransactions } from "./hooks/use-transactions";
+import {
+  useGetTransactions,
+  useUpdateTransaction,
+} from "./hooks/use-transactions";
 import { TableSkeleton } from "@/components/skeletons/table-skeleton";
+import { toast } from "sonner";
 
 export function TransactionList({
   categories,
@@ -34,6 +35,7 @@ export function TransactionList({
   const { data, isError, isLoading } = useGetTransactions({
     where: { date: dateRange },
   });
+  const updateTransaction = useUpdateTransaction();
 
   if (isError) {
     return <p>Something went wrong</p>;
@@ -52,9 +54,12 @@ export function TransactionList({
     if (!selectedTransaction) return;
 
     try {
-      const result = await updateUserTransaction(selectedTransaction.id, data);
+      const result = await updateTransaction.mutateAsync({
+        id: selectedTransaction.id,
+        data,
+      });
       if (result?.message) {
-        console.info(result.message);
+        toast.success(result.message);
       } else {
         console.info("Submitted");
       }
