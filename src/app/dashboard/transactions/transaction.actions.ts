@@ -19,7 +19,6 @@ export async function createUserTransaction(data: CreateTransactionSchema) {
   await prisma.transaction.create({
     data: { ...data, userId: session.user.id },
   });
-  revalidatePath("/transactions");
   return { success: true };
 }
 
