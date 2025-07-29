@@ -6,9 +6,6 @@ import {
   endOfMonth,
   startOfYear,
   endOfYear,
-} from "date-fns";
-import { useState, useEffect, useCallback } from "react";
-import {
   addDays,
   addMonths,
   addYears,
@@ -25,12 +22,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getUserTransactions } from "./transaction.actions";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { TransactionDateFilterType } from "@/types";
 
-type FilterType = "day" | "month" | "year";
-
-export function getDateRange(type: "day" | "month" | "year", baseDate: Date) {
+export function getDateRange(type: TransactionDateFilterType, baseDate: Date) {
   if (type === "day") {
     return {
       gte: startOfDay(baseDate),
@@ -49,50 +44,40 @@ export function getDateRange(type: "day" | "month" | "year", baseDate: Date) {
   };
 }
 
-type Props<T> = {
-  onFilter: (filtered: T[]) => void;
+type Props = {
+  filterType: TransactionDateFilterType;
+  currentDate: Date;
+  onFilterChange: (filterType: TransactionDateFilterType) => void;
+  onDateChange: (date: Date) => void;
+  isLoading?: boolean;
 };
 
-export function TransactionDateFilter<T>({ onFilter }: Props<T>) {
-  const [filterType, setFilterType] = useState<FilterType>("month");
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [isLoading, setIsLoading] = useState(false);
-
-  const fetchData = useCallback(async (type: FilterType, date: Date) => {
-    setIsLoading(true);
-    try {
-      const range = getDateRange(type, date);
-      const { data } = await getUserTransactions({ where: { date: range } });
-      onFilter(data as T[]);
-    } catch (err) {
-      console.error("Gagal fetch transaksi:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchData(filterType, currentDate);
-  }, [filterType, currentDate]);
-
-  const handlePrev = () => {
-    setCurrentDate((prev) =>
+export function TransactionDateFilter({
+  filterType,
+  currentDate,
+  onFilterChange,
+  onDateChange,
+  isLoading,
+}: Props) {
+  const handlePrev = (): void => {
+    const newDate =
       filterType === "day"
-        ? subDays(prev, 1)
+        ? subDays(currentDate, 1)
         : filterType === "month"
-        ? subMonths(prev, 1)
-        : subYears(prev, 1)
-    );
+        ? subMonths(currentDate, 1)
+        : subYears(currentDate, 1);
+
+    onDateChange(newDate);
   };
-
-  const handleNext = () => {
-    setCurrentDate((prev) =>
+  const handleNext = (): void => {
+    const newDate =
       filterType === "day"
-        ? addDays(prev, 1)
+        ? addDays(currentDate, 1)
         : filterType === "month"
-        ? addMonths(prev, 1)
-        : addYears(prev, 1)
-    );
+        ? addMonths(currentDate, 1)
+        : addYears(currentDate, 1);
+
+    onDateChange(newDate);
   };
 
   const formattedLabel = () => {
@@ -101,12 +86,13 @@ export function TransactionDateFilter<T>({ onFilter }: Props<T>) {
     return format(currentDate, "yyyy");
   };
 
+  const handleFilterChange = (value: string): void => {
+    onFilterChange(value as TransactionDateFilterType);
+  };
+
   return (
     <div className="flex items-center gap-3 mb-4">
-      <Select
-        value={filterType}
-        onValueChange={(val: FilterType) => setFilterType(val)}
-      >
+      <Select value={filterType} onValueChange={handleFilterChange}>
         <SelectTrigger className="w-[120px]">
           <SelectValue placeholder="Filter by" />
         </SelectTrigger>

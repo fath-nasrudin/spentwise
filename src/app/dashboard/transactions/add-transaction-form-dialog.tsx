@@ -11,17 +11,17 @@ import { Category, Wallet } from "@/generated/prisma";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { CreateTransactionSchema } from "./transaction.schema";
-import { createUserTransaction } from "./transaction.actions";
+import { useCreateTransaction } from "./hooks/use-transactions";
 import { TransactionForm } from "./transaction-form";
 
 type Props = { categories: Category[]; wallets: Wallet[] };
 
 export function AddTransactionFormDialogButton({ categories, wallets }: Props) {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-
+  const createTransaction = useCreateTransaction();
   async function onSubmit(data: CreateTransactionSchema) {
     try {
-      const result = await createUserTransaction(data);
+      const result = await createTransaction.mutateAsync(data);
       if (result?.message) {
         console.info(result.message);
       } else {
