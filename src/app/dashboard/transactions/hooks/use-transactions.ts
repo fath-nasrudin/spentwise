@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createUserTransaction,
+  deleteUserTransaction,
   getUserTransactions,
   updateUserTransaction,
 } from "../transaction.actions";
@@ -74,6 +75,28 @@ export function useUpdateTransaction() {
     onError: (error) => {
       console.error("Failed to update transaction:", error);
       toast.error("Failed to update transaction");
+    },
+  });
+}
+
+export function useDeleteTransaction() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+    }: {
+      id: Parameters<typeof deleteUserTransaction>[0];
+    }) => {
+      return deleteUserTransaction(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [TRANSACTION_KEY] });
+      toast.success("Success delete transaction");
+    },
+    onError: (error) => {
+      console.error("Failed to delete transaction:", error);
+      toast.error("Failed to delete transaction");
     },
   });
 }

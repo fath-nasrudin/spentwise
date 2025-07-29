@@ -1,5 +1,4 @@
 "use client";
-import { deleteUserTransaction } from "./transaction.actions";
 import { Transaction } from "@/types";
 import { DataTable } from "./data-table";
 import { createTransactionColumns } from "./transaction.columns";
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { UpdateTransactionSchema } from "./transaction.schema";
 import {
+  useDeleteTransaction,
   useGetTransactions,
   useUpdateTransaction,
 } from "./hooks/use-transactions";
@@ -36,6 +36,7 @@ export function TransactionList({
     where: { date: dateRange },
   });
   const updateTransaction = useUpdateTransaction();
+  const deleteTransaction = useDeleteTransaction();
 
   if (isError) {
     return <p>Something went wrong</p>;
@@ -75,14 +76,15 @@ export function TransactionList({
   };
   const handleDeleteTransaction = async (id: Transaction["id"]) => {
     try {
-      const result = await deleteUserTransaction(id);
+      const result = await deleteTransaction.mutateAsync({ id });
       if (result?.message) {
-        console.info(result.message);
+        toast.info(result.message);
       }
     } catch (error) {
       setIsEditDialogOpen(false);
       setSelectedTransaction(null);
       console.error("Error happened", error);
+      toast.error("Error happened");
     }
   };
   const columns = createTransactionColumns({
