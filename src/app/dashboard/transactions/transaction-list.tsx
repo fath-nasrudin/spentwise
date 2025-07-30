@@ -1,6 +1,6 @@
 "use client";
 import { Transaction } from "@/types";
-import { DataTable } from "./data-table";
+import { DataTable } from "@/components/data-table";
 import { createTransactionColumns } from "./transaction.columns";
 import { useState } from "react";
 import { TransactionForm } from "./transaction-form";
