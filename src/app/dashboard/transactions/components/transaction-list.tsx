@@ -11,12 +11,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { UpdateTransactionSchema } from "./transaction.schema";
+import { UpdateTransactionSchema } from "../transaction.schema";
 import {
   useDeleteTransaction,
   useGetTransactions,
   useUpdateTransaction,
-} from "./hooks/use-transactions";
+} from "../hooks/use-transactions";
 import { TableSkeleton } from "@/components/skeletons/table-skeleton";
 import { toast } from "sonner";
 

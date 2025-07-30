@@ -2,8 +2,8 @@ import { getUserTransactions } from "./transaction.actions";
 import { getUserCategories } from "../categories/category.db";
 import { getUserWallets } from "../wallets/wallet.actions";
 import { Metadata } from "next";
-import { TransactionsTable } from "./transactions-table";
-import { AddTransactionFormDialogButton } from "./add-transaction-form-dialog";
+import { TransactionsTable } from "./components/transactions-table";
+import { AddTransactionFormDialogButton } from "./components/add-transaction-form-dialog";
 import BalanceSummary from "@/components/BalanceSummary";
 
 export const metadata: Metadata = {
