@@ -1,11 +1,5 @@
 "use client";
 import {
-  startOfDay,
-  endOfDay,
-  startOfMonth,
-  endOfMonth,
-  startOfYear,
-  endOfYear,
   addDays,
   addMonths,
   addYears,
@@ -24,25 +18,6 @@ import {
 } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { TransactionDateFilterType } from "@/types";
-
-export function getDateRange(type: TransactionDateFilterType, baseDate: Date) {
-  if (type === "day") {
-    return {
-      gte: startOfDay(baseDate),
-      lte: endOfDay(baseDate),
-    };
-  }
-  if (type === "month") {
-    return {
-      gte: startOfMonth(baseDate),
-      lte: endOfMonth(baseDate),
-    };
-  }
-  return {
-    gte: startOfYear(baseDate),
-    lte: endOfYear(baseDate),
-  };
-}
 
 type Props = {
   filterType: TransactionDateFilterType;
