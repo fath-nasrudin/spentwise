@@ -67,14 +67,14 @@ export function WalletList({
 
   return (
     <div className="">
-      <h2 className="text-xl font-bold mb-4">Transaction History</h2>
+      <h2 className="text-xl font-bold mb-4">Wallets</h2>
 
       <DataTable columns={columns} data={data} />
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Update Transaction</DialogTitle>
+            <DialogTitle>Update Wallets</DialogTitle>
           </DialogHeader>
           <WalletForm
             onSubmit={handleUpdateWallet}
