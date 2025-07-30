@@ -1,12 +1,13 @@
 "use client";
-import { TransactionList } from "@/app/dashboard/transactions/transaction-list";
-import { getUserCategories } from "../categories/category.db";
-import { getUserWallets } from "../wallets/wallet.actions";
+import { TransactionList } from "@/app/dashboard/transactions/components/transaction-list";
+import { getUserCategories } from "../../categories/category.db";
+import { getUserWallets } from "../../wallets/wallet.actions";
 import { Metadata } from "next";
 import { Transaction } from "@/types";
-import { getDateRange, TransactionDateFilter } from "./transaction-date-filter";
+import { TransactionDateFilter } from "./transaction-date-filter";
 import { useState } from "react";
 import { TransactionDateFilterType } from "@/types";
+import { getDateRange } from "../utils/transaction.utils";
 
 export const metadata: Metadata = {
   title: "Transactions",

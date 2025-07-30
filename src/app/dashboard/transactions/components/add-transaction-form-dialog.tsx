@@ -10,8 +10,8 @@ import { useState } from "react";
 import { Category, Wallet } from "@/generated/prisma";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
-import { CreateTransactionSchema } from "./transaction.schema";
-import { useCreateTransaction } from "./hooks/use-transactions";
+import { CreateTransactionSchema } from "../transaction.schema";
+import { useCreateTransaction } from "../hooks/use-transactions";
 import { TransactionForm } from "./transaction-form";
 
 type Props = { categories: Category[]; wallets: Wallet[] };

@@ -1,6 +1,6 @@
 "use client";
 import { Transaction } from "@/types";
-import { DataTable } from "./data-table";
+import { DataTable } from "@/components/data-table";
 import { createTransactionColumns } from "./transaction.columns";
 import { useState } from "react";
 import { TransactionForm } from "./transaction-form";
@@ -11,12 +11,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { UpdateTransactionSchema } from "./transaction.schema";
+import { UpdateTransactionSchema } from "../transaction.schema";
 import {
   useDeleteTransaction,
   useGetTransactions,
   useUpdateTransaction,
-} from "./hooks/use-transactions";
+} from "../hooks/use-transactions";
 import { TableSkeleton } from "@/components/skeletons/table-skeleton";
 import { toast } from "sonner";
 
