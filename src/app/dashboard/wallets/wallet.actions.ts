@@ -94,7 +94,7 @@ export async function getUserWallets() {
     const data = await prisma.wallet.findMany({
       where: { userId: session.user.id },
     });
-    return { data };
+    return { data, success: true };
   } catch (_) {
     return { data: [], message: "Something went wrong" };
   }
@@ -145,7 +145,7 @@ export async function getUserWalletsWithBalance() {
       balance: walletBalances[wallet.id] ?? 0,
     }));
 
-    return { data };
+    return { data, success: true };
   } catch (_) {
     return { data: [], message: "Something went wrong" };
   }

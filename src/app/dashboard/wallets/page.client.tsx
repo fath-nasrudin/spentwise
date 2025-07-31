@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { WalletForm } from "./wallet-form";
 import { WalletList } from "./wallet-list";
 import { PlusIcon } from "lucide-react";
-import { createUserWallet, getUserWalletsWithBalance } from "./wallet.actions";
 import {
   Dialog,
   DialogContent,
@@ -12,16 +11,15 @@ import {
 } from "@/components/ui/dialog";
 import { WalletCreateInput } from "./wallet.schema";
 import { useState } from "react";
+import { useCreateWallet } from "./hooks/use-wallets";
 
-type Props = {
-  wallets: Awaited<ReturnType<typeof getUserWalletsWithBalance>>["data"];
-};
-export function WalletsPageClient({ wallets }: Props) {
+export function WalletsPageClient() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const createUserWallet = useCreateWallet();
 
   async function handleCreateWallet(data: WalletCreateInput) {
     try {
-      const result = await createUserWallet(data);
+      const result = await createUserWallet.mutateAsync(data);
 
       if (result.success) {
         setIsCreateDialogOpen(false);
@@ -50,7 +48,7 @@ export function WalletsPageClient({ wallets }: Props) {
         </Button>
       </div>{" "}
       {/*  */}
-      <WalletList data={wallets} />
+      <WalletList />
       {/* Dialogs */}
       {/* Create Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
