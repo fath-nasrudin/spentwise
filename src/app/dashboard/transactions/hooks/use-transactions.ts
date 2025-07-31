@@ -3,6 +3,7 @@ import {
   createUserTransaction,
   deleteUserTransaction,
   getUserTransactions,
+  getUserTransactionsSummary,
   updateUserTransaction,
 } from "../transaction.actions";
 import { toast } from "sonner";
@@ -17,6 +18,28 @@ export function useGetTransactions(
     queryFn: async () => {
       try {
         const result = await getUserTransactions(props);
+        if (!result.success) {
+          throw new Error(result.message || "Something went wrong");
+        }
+        return result.data;
+      } catch (error) {
+        if (error instanceof Error) {
+          throw new Error(error.message || "Something went wrong");
+        }
+        throw new Error("Something went wrong");
+      }
+    },
+  });
+}
+
+export function useGetTransactionsSummary(
+  props: Parameters<typeof getUserTransactionsSummary>[0]
+) {
+  return useQuery({
+    queryKey: [TRANSACTION_KEY, "summary", props],
+    queryFn: async () => {
+      try {
+        const result = await getUserTransactionsSummary(props);
         if (!result.success) {
           throw new Error(result.message || "Something went wrong");
         }

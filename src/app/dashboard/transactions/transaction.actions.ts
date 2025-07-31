@@ -77,3 +77,31 @@ export async function getUserTransactions(
   });
   return { data: transactions, success: true };
 }
+
+export async function getUserTransactionsSummary(
+  options?: Pick<Prisma.TransactionGroupByArgs, "where" | "by">
+) {
+  const session = await auth();
+
+  if (!session || !session.user || !session.user.id) {
+    return { data: [], message: "Unauthorized. Please login first" };
+  }
+  const userId = session.user.id;
+
+  const transactions = await prisma.transaction.groupBy({
+    by: ["type"],
+    where: { ...options?.where, userId },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  const flattedTransactions = transactions.map((tx) => {
+    return {
+      type: tx.type,
+      total: tx._sum.amount,
+    };
+  });
+
+  return { data: flattedTransactions, success: true };
+}
