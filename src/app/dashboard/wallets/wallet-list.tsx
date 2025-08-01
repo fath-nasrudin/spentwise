@@ -1,9 +1,4 @@
 "use client";
-import {
-  deleteUserWallet,
-  getUserWalletsWithBalance,
-  updateUserWallet,
-} from "./wallet.actions";
 import { DataTable } from "@/components/data-table";
 import { createWalletColumns } from "./wallet.columns";
 import { useState } from "react";
@@ -17,15 +12,27 @@ import {
 } from "@/components/ui/dialog";
 import { WalletUpdateInput } from "./wallet.schema";
 import { WalletWithBalance } from "@/types";
+import {
+  useDeleteWallet,
+  useGetWalletsWithBalance,
+  useUpdateWallet,
+} from "./hooks/use-wallets";
+import { TableSkeleton } from "@/components/skeletons/table-skeleton";
 
-export function WalletList({
-  data,
-}: {
-  data: Awaited<ReturnType<typeof getUserWalletsWithBalance>>["data"];
-}) {
+export function WalletList() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedWallet, setSelectedWallet] =
     useState<WalletWithBalance | null>(null);
+  const wallets = useGetWalletsWithBalance();
+  const { mutateAsync: updateUserWallet } = useUpdateWallet();
+  const { mutateAsync: deleteUserWallet } = useDeleteWallet();
+
+  // handle loading and errors
+  if (wallets.isLoading) return <TableSkeleton />;
+  if (wallets.isError) {
+    return <p>Something went wrong</p>;
+  }
+  if (!wallets.data) return <p>Something went wrong</p>;
 
   const handleEditWallet = (wallet: WalletWithBalance) => {
     setIsEditDialogOpen(true);
@@ -35,7 +42,7 @@ export function WalletList({
     if (!selectedWallet) return {};
 
     try {
-      const result = await updateUserWallet(selectedWallet.id, data);
+      const result = await updateUserWallet({ id: selectedWallet.id, data });
       if (result.success) {
         setIsEditDialogOpen(false);
         setSelectedWallet(null);
@@ -50,7 +57,7 @@ export function WalletList({
   };
   const handleDeleteTransaction = async (id: Wallet["id"]) => {
     try {
-      const result = await deleteUserWallet(id);
+      const result = await deleteUserWallet({ id });
       if (result?.message) {
         console.info(result.message);
       }
@@ -69,7 +76,7 @@ export function WalletList({
     <div className="">
       <h2 className="text-xl font-bold mb-4">Wallets</h2>
 
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={wallets.data} />
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">

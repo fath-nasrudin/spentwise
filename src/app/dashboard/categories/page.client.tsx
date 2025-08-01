@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { CategoryList } from "./CategoryList";
 import { PlusIcon } from "lucide-react";
-import { Category } from "@/generated/prisma";
 import { useState } from "react";
 import {
   Dialog,
@@ -11,15 +10,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CategoryForm } from "./CategoryForm";
-import { createCategory } from "./actions";
 import { CreateCategorySchema } from "./category.schema";
+import { useCreateCategory } from "./hooks/use-categories";
 
-export function CategoriesPageClient({
-  categories,
-}: {
-  categories: Category[];
-}) {
+export function CategoriesPageClient() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const createCategory = useCreateCategory();
 
   function onCreateNew() {
     // handle something here
@@ -29,7 +25,7 @@ export function CategoriesPageClient({
 
   async function handleCreateCategory(values: CreateCategorySchema) {
     try {
-      const result = await createCategory(values);
+      const result = await createCategory.mutateAsync(values);
       if (result.success) {
         setIsCreateDialogOpen(false);
       }
@@ -54,7 +50,8 @@ export function CategoriesPageClient({
         </Button>
       </div>
       {/* List */}
-      <CategoryList data={categories} />
+      <CategoryList />
+      {/* <CategoryList data={categories} /> */}
 
       {/* Dialogs */}
       {/* Create Dialog */}

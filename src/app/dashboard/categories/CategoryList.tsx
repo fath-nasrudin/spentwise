@@ -11,7 +11,12 @@ import {
 import { useState } from "react";
 import { CategoryForm } from "./CategoryForm";
 import { UpdateCategorySchema } from "./category.schema";
-import { deleteCategory, updateCategory } from "./actions";
+import {
+  useDeleteCategory,
+  useGetCategories,
+  useUpdateCategory,
+} from "./hooks/use-categories";
+import { TableSkeleton } from "@/components/skeletons/table-skeleton";
 
 const USE_TABLE = true;
 
@@ -29,11 +34,22 @@ function CategoryListList({ categories }: { categories: Category[] }) {
   }
 }
 
-export function CategoryList({ data }: { data: Category[] }) {
+export function CategoryList() {
+  // { data }: { data: Category[] }
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
+  const updateCategory = useUpdateCategory();
+  const deleteCategory = useDeleteCategory();
+  const categories = useGetCategories();
+
+  // handle loading and errors
+  if (categories.isLoading) return <TableSkeleton />;
+  if (categories.isError) {
+    return <p>Something went wrong</p>;
+  }
+  if (!categories.data) return <p>Something went wrong</p>;
 
   function handleEdit(category: Category) {
     setIsEditDialogOpen(true);
@@ -43,7 +59,10 @@ export function CategoryList({ data }: { data: Category[] }) {
     if (!selectedCategory) return {};
 
     try {
-      const result = await updateCategory(selectedCategory.id, category);
+      const result = await updateCategory.mutateAsync({
+        id: selectedCategory.id,
+        data: category,
+      });
 
       if (result.success) {
         setIsEditDialogOpen(false);
@@ -57,7 +76,7 @@ export function CategoryList({ data }: { data: Category[] }) {
 
   async function handleDelete(id: string) {
     try {
-      const result = await deleteCategory(id);
+      const result = await deleteCategory.mutateAsync({ id });
       console.info(result.message);
     } catch (_) {
       console.info("Failed to delete category");
@@ -73,9 +92,9 @@ export function CategoryList({ data }: { data: Category[] }) {
     <div className="">
       <h2 className="text-xl font-bold mb-4">Categories</h2>
       {USE_TABLE ? (
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={categories.data} />
       ) : (
-        <CategoryListList categories={data} />
+        <CategoryListList categories={categories.data} />
       )}
 
       {/* update Dialog */}
