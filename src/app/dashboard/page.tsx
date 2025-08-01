@@ -21,7 +21,7 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const date = new Date("7-28-2025");
+  const date = new Date();
   const dateType = "month";
   const dateRange = getDateRange(dateType, date);
   const label = formatDateLabel(dateType, date);
