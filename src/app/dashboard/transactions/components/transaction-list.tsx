@@ -21,8 +21,10 @@ import { toast } from "sonner";
 
 export function TransactionList({
   dateRange,
+  label,
 }: {
   dateRange: { gte: Date; lte: Date };
+  label?: string;
 }) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
@@ -89,7 +91,9 @@ export function TransactionList({
 
   return (
     <div className="">
-      <h2 className="text-xl font-bold mb-4">Transaction History</h2>
+      <h2 className="text-xl font-bold mb-4">
+        Transaction History{label && `: ${label}`}
+      </h2>
       <DataTable columns={columns} data={data} />
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
