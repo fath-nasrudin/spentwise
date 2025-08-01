@@ -1,7 +1,6 @@
 "use client";
 import { AddTransactionFormDialogButton } from "./components/add-transaction-form-dialog";
 import BalanceSummary from "@/components/BalanceSummary";
-import { Transaction } from "@/types";
 import { TransactionsTable } from "./components/transactions-table";
 
 function TransactionHeader() {
@@ -18,17 +17,11 @@ function TransactionHeader() {
   );
 }
 
-type TransactionsPageClientProps = {
-  transactions: Transaction[];
-};
-
-export function TransactionsPageClient({
-  transactions,
-}: TransactionsPageClientProps) {
+export function TransactionsPageClient() {
   return (
     <div className="container w-full max-w-7xl mx-auto p-6 space-y-6">
       <TransactionHeader />
-      <BalanceSummary transactions={transactions} />
+      <BalanceSummary />
       <TransactionsTable />
     </div>
   );
