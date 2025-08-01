@@ -1,8 +1,16 @@
 import { buttonVariants } from "@/components/ui/button";
 import { SiGithub } from "react-icons/si";
 import Link from "next/link";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
+  if (!session || !session.user || !session.user.id) {
+    redirect("/login");
+  }
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-4 row-start-2 items-center sm:items-start">
@@ -14,10 +22,10 @@ export default function Home() {
             Demo
           </Link>
           <Link
-            href="/login"
+            href={session.user.id ? "/dashboard" : "/login"}
             className={buttonVariants({ variant: "secondary" })}
           >
-            Login
+            {session.user.id ? "Dashboard" : "Login"}
           </Link>
         </div>
       </main>
