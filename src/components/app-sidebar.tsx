@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
@@ -10,10 +12,12 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { getSidebarMenu } from "@/data/nav.data";
+import { usePathname } from "next/navigation";
 
 const items = getSidebarMenu();
 
 export function AppSidebar() {
+  const pathname = usePathname();
   return (
     <Sidebar>
       <SidebarHeader>
@@ -37,7 +41,14 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton
+                    asChild
+                    className={
+                      item.url === pathname
+                        ? "bg-green-300 hover:bg-green-300"
+                        : ""
+                    }
+                  >
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>

@@ -1,13 +1,18 @@
 import {
   ArrowLeftRightIcon,
   GoalIcon,
-  Settings,
+  LayoutDashboard,
   TagsIcon,
   WalletIcon,
 } from "lucide-react";
 
 export function getSidebarMenu() {
   return [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboard,
+    },
     {
       title: "Categories",
       url: "/dashboard/categories",
@@ -27,11 +32,6 @@ export function getSidebarMenu() {
       title: "Budgets",
       url: "/dashboard/budgets",
       icon: GoalIcon,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings,
     },
   ];
 }
