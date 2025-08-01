@@ -10,6 +10,22 @@ import {
 } from "./category.schema";
 import { revalidatePath } from "next/cache";
 
+export async function getUserCategories() {
+  try {
+    const session = await auth();
+    if (!session || !session.user || !session.user.id) {
+      throw new Error("Unauthorized. Please login first");
+    }
+
+    const categories = await prisma.category.findMany({
+      where: { userId: session.user.id },
+    });
+    return { data: categories, error: null, success: true };
+  } catch (error) {
+    return { data: [], error, message: "Something went wrong" };
+  }
+}
+
 export async function createCategory(data: CreateCategorySchema) {
   const session = await auth();
 
