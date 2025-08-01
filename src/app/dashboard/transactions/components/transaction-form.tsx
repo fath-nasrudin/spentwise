@@ -15,7 +15,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../../components/ui/form";
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -23,23 +23,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Category, Wallet } from "@/generated/prisma";
+import { Category } from "@/generated/prisma";
 import { useEffect, useState } from "react";
 import { Transaction } from "@/types";
+import { useGetWallets } from "../../wallets/hooks/use-wallets";
+import { useGetCategories } from "../../categories/hooks/use-categories";
 
 type TransactionFormProps = {
-  categories: Category[];
-  wallets: Wallet[];
   onSubmit: (data: CreateTransactionSchema) => void;
   initialData?: Partial<Transaction | null>;
 };
 
 export function TransactionForm({
-  categories,
-  wallets,
   onSubmit,
   initialData,
 }: TransactionFormProps) {
+  const walletsQuery = useGetWallets();
+  const categoriesQuery = useGetCategories();
+  const { data: categories } = useGetCategories();
+
   const form = useForm({
     resolver: zodResolver(createTransactionSchema),
     defaultValues: {
@@ -54,7 +56,9 @@ export function TransactionForm({
 
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const type = form.watch("type");
+
   useEffect(() => {
+    if (!categories) return;
     const filtered = categories.filter((cat) => cat.type === type);
     setFilteredCategories(filtered);
 
@@ -159,11 +163,21 @@ export function TransactionForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {wallets?.map((wallet) => (
-                      <SelectItem key={wallet.id} value={wallet.id}>
-                        {wallet.name}
+                    {walletsQuery.isLoading ? (
+                      <SelectItem value="loading">Loading..</SelectItem>
+                    ) : walletsQuery.isError ? (
+                      <SelectItem value="error">
+                        Something went wrong
                       </SelectItem>
-                    ))}
+                    ) : !walletsQuery.data ? (
+                      <SelectItem value="notfound">Data not found</SelectItem>
+                    ) : (
+                      walletsQuery.data?.map((wallet) => (
+                        <SelectItem key={wallet.id} value={wallet.id}>
+                          {wallet.name}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -188,11 +202,21 @@ export function TransactionForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {filteredCategories?.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
+                    {categoriesQuery.isLoading ? (
+                      <SelectItem value="loading">Loading..</SelectItem>
+                    ) : categoriesQuery.isError ? (
+                      <SelectItem value="error">
+                        Something went wrong
                       </SelectItem>
-                    ))}
+                    ) : !categoriesQuery.data ? (
+                      <SelectItem value="notfound">Data not found</SelectItem>
+                    ) : (
+                      filteredCategories?.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
                 <FormMessage />
