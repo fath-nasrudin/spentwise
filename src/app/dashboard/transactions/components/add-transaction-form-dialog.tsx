@@ -7,16 +7,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import { Category, Wallet } from "@/generated/prisma";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { CreateTransactionSchema } from "../transaction.schema";
 import { useCreateTransaction } from "../hooks/use-transactions";
 import { TransactionForm } from "./transaction-form";
 
-type Props = { categories: Category[]; wallets: Wallet[] };
-
-export function AddTransactionFormDialogButton({ categories, wallets }: Props) {
+export function AddTransactionFormDialogButton() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const createTransaction = useCreateTransaction();
   async function onSubmit(data: CreateTransactionSchema) {
@@ -48,11 +45,7 @@ export function AddTransactionFormDialogButton({ categories, wallets }: Props) {
           <DialogHeader>
             <DialogTitle>Create New Transaction</DialogTitle>
           </DialogHeader>
-          <TransactionForm
-            onSubmit={onSubmit}
-            categories={categories}
-            wallets={wallets}
-          />
+          <TransactionForm onSubmit={onSubmit} />
         </DialogContent>
       </Dialog>
     </>

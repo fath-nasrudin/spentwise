@@ -4,7 +4,6 @@ import { DataTable } from "@/components/data-table";
 import { createTransactionColumns } from "./transaction.columns";
 import { useState } from "react";
 import { TransactionForm } from "./transaction-form";
-import { Category, Wallet } from "@/generated/prisma";
 import {
   Dialog,
   DialogContent,
@@ -21,12 +20,8 @@ import { TableSkeleton } from "@/components/skeletons/table-skeleton";
 import { toast } from "sonner";
 
 export function TransactionList({
-  categories,
-  wallets,
   dateRange,
 }: {
-  categories: Category[];
-  wallets: Wallet[];
   dateRange: { gte: Date; lte: Date };
 }) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -102,8 +97,6 @@ export function TransactionList({
             <DialogTitle>Update Transaction</DialogTitle>
           </DialogHeader>
           <TransactionForm
-            categories={categories}
-            wallets={wallets}
             onSubmit={handleUpdateTransaction}
             initialData={selectedTransaction}
           />
