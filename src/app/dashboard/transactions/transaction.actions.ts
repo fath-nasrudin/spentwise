@@ -79,7 +79,7 @@ export async function getUserTransactions(
 }
 
 export async function getUserTransactionsSummary(
-  options?: Pick<Prisma.TransactionGroupByArgs, "where" | "by">
+  options?: Partial<Pick<Prisma.TransactionGroupByArgs, "where" | "by">>
 ) {
   const session = await auth();
 
@@ -89,7 +89,7 @@ export async function getUserTransactionsSummary(
   const userId = session.user.id;
 
   const transactions = await prisma.transaction.groupBy({
-    by: ["type"],
+    by: options?.by || ["type"],
     where: { ...options?.where, userId },
     _sum: {
       amount: true,
