@@ -17,7 +17,7 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <h1>Dashboard</h1>
+      <h1>Fix Prisma No Engine Branch</h1>
       <div>
         <p>{session.user.name}</p>
         <p>{session.user.id}</p>
