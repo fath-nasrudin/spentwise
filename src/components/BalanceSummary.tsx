@@ -1,3 +1,5 @@
+"use client";
+
 import { useGetTransactionsSummary } from "@/app/dashboard/transactions/hooks/use-transactions";
 import { cn } from "@/lib/utils";
 
